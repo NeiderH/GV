@@ -7,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrl: './factura.component.css'
 })
 export default class FacturaComponent {
+
+  ngOnInit() {
+    this.obtenerFactura();
+  }
+
+  obtenerFactura(){
+
+  }
+  //mas funciones...
   
 }
