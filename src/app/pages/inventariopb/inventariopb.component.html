@@ -1,0 +1,400 @@
+<style>
+    /* Estilos generales */
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        text-align: center;
+        background-color: #f9f9f9;
+        padding: 30px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        margin-top: -30px;
+    }
+
+    /* Botón de registrar */
+    .button.is-primary {
+        background-color: #1D3A6C;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .button.is-primary .icon {
+        font-size: 18px;
+    }
+
+    /* Contenedor de la tabla */
+    .table-container {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 12px;
+        background: #f9f9f9;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        max-height: 370px;
+        /* Altura máxima antes de activar el scroll */
+        overflow-y: auto;
+        /* Scroll vertical */
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    /* Estilo del scrollbar */
+    .table-container::-webkit-scrollbar {
+        width: 8px;
+        /* Ancho del scrollbar */
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background-color: #1D3A6C;
+        /* Color del scrollbar */
+        border-radius: 4px;
+        /* Bordes redondeados */
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background-color: #0F264A;
+        /* Color más oscuro al pasar el mouse */
+    }
+
+    .table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        /* Color de fondo del scrollbar */
+        border-radius: 4px;
+    }
+
+    /* Estilos de la tabla */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table thead {
+        position: sticky;
+        top: -11px;
+        background-color: #1D3A6C;
+        /* Mantiene el color de fondo al hacer scroll */
+        z-index: 100;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #1D3A6C;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .buttons {
+        padding-top: 20px;
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 24px;
+        /* Tamaño más grande */
+        font-weight: bold;
+        /* Negrita para destacar */
+        color: #1D3A6C;
+        /* Color que usas en otros elementos */
+        margin-bottom: 20px;
+        /* Espacio debajo */
+        text-transform: uppercase;
+        /* Mayúsculas para resaltar */
+        letter-spacing: 1px;
+        /* Espaciado entre letras */
+    }
+
+    .filter-container {
+        position: absolute;
+        margin-top: -48px;
+        margin-left: 800px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        /* Para que sea responsive */
+        justify-content: center;
+        /* Centrar los elementos */
+        margin-bottom: 20px;
+        /* Espacio debajo del filtro */
+    }
+
+    .search-box {
+        flex-grow: 1;
+        max-width: 300px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 3px 8px;
+    }
+
+    .search-box .icon {
+        margin-right: 10px;
+        font-size: 18px;
+        color: #1D3A6C;
+    }
+
+    .search-input {
+        border: none;
+        outline: none;
+        flex-grow: 1;
+    }
+
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        /* Fijar el modal en la pantalla */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Fondo oscuro y semi-transparente */
+        z-index: 1000;
+        /* Asegura que esté por encima de otros elementos */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.is-active {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Ajusta la opacidad */
+    }
+
+    .modal-content {
+        position: relative;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 1001;
+        /* Más alto que el fondo oscuro */
+        width: 800px;
+        height: auto;
+        position: absolute;
+        margin-top: -70px;
+        margin-left: 190px;
+    }
+
+    .box {
+        padding: 60px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .input {
+        width: 100%;
+        max-width: 300px;
+        /* Limita el ancho máximo */
+        padding: 10px;
+        border-radius: 8px;
+        /* Bordes más redondeados */
+        border: 1px solid #ddd;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        /* Sombra ligera */
+        transition: border-color 0.3s, box-shadow 0.3s;
+        /* Transiciones suaves */
+    }
+
+    .input:focus {
+        border-color: #1D3A6C;
+        /* Color de borde al enfocar */
+        box-shadow: 0px 2px 8px rgba(29, 58, 108, 0.3);
+        /* Sombra más pronunciada al enfocar */
+        outline: none;
+        /* Elimina el borde de enfoque predeterminado */
+    }
+
+    .field {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+<!-- tabla de los platos registrados y ventana modal para registrar platos  -->
+<div class="container">
+    <h1 class="title">Mercancias Registradas</h1>
+    <button class="button is-primary" (click)="abrirModal()">
+        <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                fill="#fff">
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+            </svg></span> Registrar Inventario desde Mercancia
+    </button>
+    <div class="filter-container">
+        <div class="search-box">
+            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                    width="24px" fill="#000">
+                    <path
+                        d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                </svg></span>
+            <input class="search-input" type="text" placeholder="Buscar..." [(ngModel)]="busqueda"
+                (input)="filtrarMercancia()">
+        </div>
+    </div>
+
+
+    <!-- Tabla dentro de un cuadro redondeado -->
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Proveedor</th>
+                    <th>Fecha</th>  
+                    <th>Producto</th>
+                    <th>Descripcion</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let mercancia of inventarioFiltrado">
+                    <td>{{ mercancia.proveedor }}</td>
+                    <td>{{ mercancia.fecha }}</td>
+                    <td>{{ mercancia.producto }}</td>
+                    <td>{{ mercancia.descripcion }}</td>
+                    <td>{{ mercancia.precio }}</td>
+                    <td>{{ mercancia.estado == 1 ? 'Anulado' : (mercancia.estado == 0 ? 'Activo' : 'N/A') }}</td>
+                    <td class="flex justify-center">
+                        <div class="flex space-x-4">
+                            <button
+                                class="middle none center rounded-lg bg-orange-500 py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-orange-500/20 transition-all hover:shadow-lg hover:shadow-orange-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                data-ripple-light="true" (click)="abrirModalEdicion(mercancia)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                    width="24px" fill="#fff">
+                                    <path
+                                        d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                </svg>
+                            </button>
+                            <button
+                                class="middle none center rounded-lg bg-red-500 py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                data-ripple-light="true" (click)="''">
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                    width="24px" fill="#fff">
+                                    <path
+                                        d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para registrar una nueva Observacion -->
+<div class="modal" [ngClass]="{'is-active': modalActivo && !inventarioSeleccionada.id_inv}">
+    <div class="modal-background" (click)="cerrarModal()"></div>
+    <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="box">
+            <h1 class="title">Registrar Inventario desde Mercancia</h1>
+            <form (ngSubmit)="registrarMercancia()" class="form">
+                <div class="field">
+                    <label class="label">Observacion</label>
+                    <div class="control">
+                        <input class="input" type="text" [(ngModel)]="nuevainventario.observaciont" name="nom_plato"
+                            required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Fecha</label>
+                    <div class="control">
+                        <input class="input" type="datetime-local" [(ngModel)]="nuevainventario.fecha" name="fecha"
+                            required>
+                    </div>
+                </div>
+                <div class="is-grouped buttons">
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="submit">Registrar</button>
+                    </div>
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="button" (click)="cerrarModal()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" (click)="cerrarModal()"></button>
+</div>
+
+<!-- Modal para actualizar una Observacion -->
+<div class="modal" [ngClass]="{'is-active': modalActivo && inventarioSeleccionada.id_inv}">
+    <div class="modal-background" (click)="cerrarModal()"></div>
+    <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="box">
+            <h1 class="title">Actualizar Observación</h1>
+            <form (ngSubmit)="''" class="form">
+                <div class="field">
+                    <label class="label">Observacion</label>
+                    <div class="control">
+                        <input class="input" type="text" [(ngModel)]="inventarioSeleccionada.producto"
+                            name="nom_plato" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Fecha</label>
+                    <div class="control">
+                        <input class="input" type="datetime-local" [(ngModel)]="inventarioSeleccionada.fecha" name="valor"
+                            required>
+                    </div>
+                </div>
+                <div class="is-grouped buttons">
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="submit">Actualizar</button>
+                    </div>
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="button" (click)="cerrarModal()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" (click)="cerrarModal()"></button>
+</div>
+
+<!-- stylesheet -->
+<link rel="stylesheet" href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css" />
+
+<!-- Ripple Effect from cdn -->
+<script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
