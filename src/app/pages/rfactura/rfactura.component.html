@@ -83,7 +83,7 @@
 
     .table th,
     .table td {
-        padding: 10px;
+        padding: 5px;
         border-bottom: 1px solid #ddd;
         text-align: center;
     }
@@ -161,6 +161,10 @@
         flex-grow: 1;
     }
 
+    .has-text-danger {
+        color: red;
+        font-weight: bold;
+    }
 
     /* Modal */
     .modal {
@@ -239,16 +243,66 @@
         margin-bottom: 20px;
         text-align: center;
     }
+
+    .btns {
+        display: flex;
+        gap: 10px;
+    }
+
+    .columns {
+        display: flex;
+        gap: 20px;
+    }
+
+    .column {
+        flex: 1;
+    }
+
+    .field {
+        margin-bottom: 15px;
+    }
+    /* Estilo para las columnas de detalles */
+.detalles-column {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+/* Estilo para los elementos de detalles */
+.detalles-item {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+/* Estilo para los títulos en negrita dentro de los detalles */
+.detalles-item strong {
+    font-weight: 600;
+    color: #484848;
+    
+}
 </style>
 <!-- tabla de los platos registrados y ventana modal para registrar platos  -->
 <div class="container">
-    <h1 class="title">xxxxxxxxx Registradas</h1>
-    <button class="button is-primary" (click)="''">
-        <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                fill="#fff">
-                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-            </svg></span> Registrar 
-    </button>
+    <h1 class="title">Facturas Registradas</h1>
+    <div class="btns">
+        <button class="button is-primary" (click)="abrirModal()">
+            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                    width="24px" fill="#fff">
+                    <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+                </svg></span> Registrar Factura
+        </button>
+
+        <button class="button is-primary" [routerLink]="'/factura'">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+                <path
+                    d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v242q-18-14-38-23t-42-19v-200H447l-80-80H160v480h120v80H160ZM640-40q-91 0-168-48T360-220q35-84 112-132t168-48q91 0 168 48t112 132q-35 84-112 132T640-40Zm0-80q57 0 107.5-26t82.5-74q-32-48-82.5-74T640-320q-57 0-107.5 26T450-220q32 48 82.5 74T640-120Zm0-40q-25 0-42.5-17.5T580-220q0-25 17.5-42.5T640-280q25 0 42.5 17.5T700-220q0 25-17.5 42.5T640-160Zm-480-80v-480 277-37 240Z" />
+            </svg> Ver Total de facturas Diarias
+        </button>
+    </div>
     <div class="filter-container">
         <div class="search-box">
             <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
@@ -260,30 +314,26 @@
                 (input)="''">
         </div>
     </div>
-
-
     <!-- Tabla dentro de un cuadro redondeado -->
     <div class="table-container">
         <table class="table">
             <thead>
                 <tr>
-                    <th>xxxxxxxxx</th>
-                    <th>xxxxxxxxx</th>  
-                    <th>xxxxxxxxx</th>
-                    <th>xxxxxxxxx</th>
-                    <th>xxxxxxxxx</th>
-                    <th>xxxxxxxxx</th>
+                    <th>Fecha</th>
+                    <th>Tipo de Proceso</th>  
+                    <th>Subtotal</th>
+                    <th>Descripcion</th>
+                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let mercancia">
-                    <td>{{ mercancia.proveedor }}</td>
-                    <td>{{ mercancia.fecha }}</td>
-                    <td>{{ mercancia.producto }}</td>
-                    <td>{{ mercancia.descripcion }}</td>
-                    <td>{{ mercancia.precio }}</td>
-                    <td>{{ mercancia.estado == 1 ? 'Anulado' : (mercancia.estado == 0 ? 'Activo' : 'N/A') }}</td>
+                <tr *ngFor="let factura of facturaFiltrados">
+                    <td>{{ factura.fecha }}</td>
+                    <td>{{ factura.tipo_proceso }}</td>
+                    <td>{{ factura.subtotal }}</td>
+                    <td>{{ factura.descripcion }}</td>
+                    <td>{{ factura.estado == 1 ? 'Anulado' : (factura.estado == 0 ? 'Activo' : 'N/A') }}</td>
                     <td class="flex justify-center">
                         <div class="flex space-x-4">
                             <button
@@ -311,6 +361,141 @@
         </table>
     </div>
 </div>
+
+<!-- Modal para registrar una nueva Mercancia -->
+<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'registrar' && !facturaSeleccionada.id_factura}">
+    <div class="modal-background" (click)="cerrarModal()"></div>
+    <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="box">
+            <h1 class="title">Registrar Nueva Mercancía</h1>
+            <form (ngSubmit)="registrarFactura()" class="form">
+                <div class="columns">
+                    <!-- Primera columna -->
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Proveedor <span class="has-text-danger">*</span></label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="nuevafactura.proveedor" name="proveedor"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Producto <span class="has-text-danger">*</span></label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="nuevafactura.producto" name="producto"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Descripcion</label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="nuevafactura.descripcion"
+                                    name="descripcion" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Segunda columna -->
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Precio <span class="has-text-danger">*</span></label>
+                            <div class="control">
+                                <input class="input" type="number" [(ngModel)]="nuevafactura.precio" name="precio"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Fecha <span class="has-text-danger">*</span></label>
+                            <div class="control">
+                                <input class="input" type="date" [(ngModel)]="nuevafactura.fecha" name="fecha"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- botones -->
+                <div class="is-grouped buttons">
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="button" (click)="registrarFactura()">Registrar</button>
+                    </div>
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="button" (click)="cerrarModal()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" (click)="cerrarModal()"></button>
+</div>
+
+<!-- Modal para actualizar una mercancia -->
+<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'editar' && facturaSeleccionada.id_factura}">
+    <div class="modal-background" (click)="cerrarModal()"></div>
+    <div class="modal-content">
+        <!-- Contenido del modal -->
+        <div class="box">
+            <h1 class="title">Actualizar Observación</h1>
+            <form (ngSubmit)="editarFactura()" class="form">
+                <div class="columns">
+                    <!-- Primera columna -->
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Proveedor</label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="facturaSeleccionada.proveedor"
+                                    name="proveedor" required disabled="true">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Producto</label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="facturaSeleccionada.producto"
+                                    name="producto" required disabled="true">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Segunda columna -->
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Precio</label>
+                            <div class="control">
+                                <input class="input" type="number" [(ngModel)]="facturaSeleccionada.precio"
+                                    name="precio" required disabled="true">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Descripcion</label>
+                            <div class="control">
+                                <input class="input" type="text" [(ngModel)]="facturaSeleccionada.descripcion"
+                                    name="descripcion" required>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="is-grouped buttons">
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="submit">Actualizar</button>
+                    </div>
+                    <div class="control">
+                        <button
+                            class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            data-ripple-light="true" type="button" (click)="cerrarModal()">Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" (click)="cerrarModal()"></button>
+</div>
+
+<!-- Modal para ver detalles de la mercancia -->
 
 <!-- stylesheet -->
 <link rel="stylesheet" href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css" />

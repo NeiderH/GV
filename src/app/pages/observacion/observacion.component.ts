@@ -31,7 +31,6 @@ export default class ObservacionComponent {
       (data: any) => {
         this.observacion = data.map((obs: any) => ({
           ...obs,
-          fecha: new Date(obs.fecha).toLocaleString('es-CO', { timeZone: 'America/Bogota' }),
         }));
         this.observacionFiltrados = this.observacion; // Los datos ya están ordenados desde el backend
       },

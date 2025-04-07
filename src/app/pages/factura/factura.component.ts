@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-factura',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './factura.component.html',
   styleUrl: './factura.component.css'
 })

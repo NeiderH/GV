@@ -26,10 +26,11 @@ export const routes: Routes = [
                 path: 'factura',
                 loadComponent: () => import('./pages/factura/factura.component')
             },
-            {
-                path: 'inventariopb',
-                loadComponent: () => import('./pages/inventariopb/inventariopb.component')
-            },
+            // {
+            //     //No se usara mas
+            //     path: 'inventariopb',
+            //     loadComponent: () => import('./pages/inventariopb/inventariopb.component')
+            // },
             {
                 path: 'mercancia',
                 loadComponent: () => import('./pages/mercancia/mercancia.component')
@@ -38,10 +39,11 @@ export const routes: Routes = [
                 path: 'observacion',
                 loadComponent: () => import('./pages/observacion/observacion.component')
             },
-            {
-                path: 'platosyb',
-                loadComponent: () => import('./pages/platosyb/platosyb.component').then(m => m.PlatosybComponent)
-            },
+            // {
+            //     //No se usara mas
+            //     path: 'platosyb',
+            //     loadComponent: () => import('./pages/platosyb/platosyb.component').then(m => m.PlatosybComponent)
+            // },
             {
                 path: 'rfactura',
                 loadComponent: () => import('./pages/rfactura/rfactura.component')

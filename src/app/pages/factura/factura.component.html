@@ -243,12 +243,12 @@
 <!-- tabla de los platos registrados y ventana modal para registrar platos  -->
 <div class="container">
   <h1 class="title">xxxxxxxxx Registradas</h1>
-  <button class="button is-primary" (click)="''">
-      <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-              fill="#fff">
-              <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-          </svg></span> Registrar 
-  </button>
+  <button class="button is-primary" [routerLink]="'/rfactura'">
+    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+            fill="#fff">
+            <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+        </svg></span> Volver
+</button>
   <div class="filter-container">
       <div class="search-box">
           <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
