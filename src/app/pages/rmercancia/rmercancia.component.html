@@ -331,7 +331,7 @@
                     <td>{{ mercancia.proveedor }}</td>
                     <td>{{ mercancia.fecha }}</td>
                     <td>{{ mercancia.producto }}</td>
-                    <td>${{ mercancia.precio }}</td>
+                    <td>${{ mercancia.precio.toLocaleString('es-ES') }}</td>
                     <td style="display: none;">{{ mercancia.estado == 0 ? 'Anulado' : (mercancia.estado == 1 ? 'Activo'
                         : 'N/A') }}</td>
                     <td class="flex justify-center">
@@ -460,7 +460,7 @@
     <div class="modal-content">
         <!-- Contenido del modal -->
         <div class="box">
-            <h1 class="title">Actualizar Observación</h1>
+            <h1 class="title">Actualizar Mercancia</h1>
             <form (ngSubmit)="editarMercancia()" class="form">
                 <div class="columns">
                     <!-- Primera columna -->

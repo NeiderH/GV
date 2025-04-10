@@ -125,7 +125,7 @@
     .filter-container {
         position: absolute;
         margin-top: -48px;
-        margin-left: 780px;
+        margin-left: 880px;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -265,7 +265,7 @@
 </style>
 <!-- tabla de los platos registrados y ventana modal para registrar platos  -->
 <div class="container">
-    <h1 class="title">Mercancia Diaria Total Registrada</h1>
+    <h1 class="title">Mercancia Diaria Total</h1>
     <button class="button is-primary" [routerLink]="'/rmercancia'">
         <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                 fill="#fff">
@@ -274,8 +274,7 @@
     </button>
         <!-- filtro por fecha -->
         <div class="filter-container">
-            <input type="date" id="filtroFecha" [(ngModel)]="filtroFecha" class="input" />
-            <button class="button is-primary" (click)="filtrarPorFecha()">Filtrar</button>
+            <input type="date" id="filtroFecha" [(ngModel)]="filtroFecha" class="input" (ngModelChange)="filtrarPorFecha()" />
         </div>
     <!-- Tabla dentro de un cuadro redondeado -->
     <div class="table-container">
@@ -332,7 +331,7 @@
                         <td>{{ mercancia.proveedor }}</td>
                         <td>{{ mercancia.producto }}</td>
                         <td>{{ mercancia.descripcion }}</td>
-                        <td>${{ mercancia.precio }}</td>
+                        <td>${{ mercancia.precio.toLocaleString('es-ES') }}</td>
                         <td class="detalles-item">
                             <span
                                 [ngClass]="{'text-green-500': mercancia.estado == 1, 'text-red-500': mercancia.estado == 0}">
@@ -344,7 +343,7 @@
             </table>
             <p><strong>Total:</strong> ${{ totalPorFecha }}</p>
             <div class="is-grouped buttons">
-                <button class="button is-primary" (click)="cerrarModal()">Cerrar</button>
+                <button class="button is-primary transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" (click)="cerrarModal()">Cerrar</button>
             </div>
         </div>
     </div>
