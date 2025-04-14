@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
+  imports: [RouterLink],
+  standalone: true,
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })

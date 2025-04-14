@@ -8,7 +8,17 @@ import { MatInputModule } from '@angular/material/input';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
-
+interface Agrupacion {
+  total: number;
+  totalfac: number;
+  totalinv: number;
+  totalsini: number;
+  totalventa: number;
+  totaldom: number;
+  totaltrans: number;
+  totalotro: number;
+  detalles: any[];
+}
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -34,51 +44,55 @@ export default class DashboardComponent implements OnInit {
   }
 
   obtenerGananciasPorDia(fecha: string = '') {
-    // Si no hay fecha seleccionada, enviar un parámetro vacío para obtener las 5 más recientes
-    const params: any = { limit: '5' };
+    const params: any = {}; // No limitamos los registros individuales en la consulta
     if (fecha) {
-      params.fecha = fecha;
+        params.fecha = fecha;
     }
-  
+
     this.http
-      .get<any>('http://localhost:3016/api/Factura/GetFacturaAgrupada', { params })
-      .subscribe((data) => {
-        const labels = Object.keys(data);
-        const ganancias = labels.map((fecha) => data[fecha].total);
-  
-        // Calcular ganancias totales
-        this.gananciasTotales = ganancias.reduce((acc, curr) => acc + curr, 0);
-  
-        // Destruir el gráfico existente si ya está creado
-        if (this.barChart) {
-          this.barChart.destroy();
-        }
-  
-        // Crear gráfico de barras
-        this.barChart = new Chart(this.barChartRef.nativeElement, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: 'Ganancias del dia',
-                data: ganancias,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                display: true,
-              },
-            },
-          },
+        .get<Record<string, Agrupacion>>('http://localhost:3016/api/Factura/GetFacturaAgrupada', { params })
+        .subscribe((data) => {
+            // Procesar las agrupaciones por fecha
+            const agrupaciones = Object.entries(data) // Convertir a un array de [fecha, datos]
+                .sort((a: [string, Agrupacion], b: [string, Agrupacion]) => new Date(b[0]).getTime() - new Date(a[0]).getTime()) // Ordenar por fecha descendente
+                .slice(0, 5); // Tomar las 5 agrupaciones más recientes
+
+            const labels = agrupaciones.map(([fecha]) => fecha); // Fechas de las agrupaciones
+            const ganancias = agrupaciones.map(([_, datos]) => datos.total); // Totales por fecha
+
+            // Calcular ganancias totales
+            this.gananciasTotales = ganancias.reduce((acc, curr) => acc + curr, 0);
+
+            // Destruir el gráfico existente si ya está creado
+            if (this.barChart) {
+                this.barChart.destroy();
+            }
+
+            // Crear gráfico de barras
+            this.barChart = new Chart(this.barChartRef.nativeElement, {
+                type: 'bar',
+                data: {
+                    labels: labels, // Fechas agrupadas
+                    datasets: [
+                        {
+                            label: 'Ganancias del día',
+                            data: ganancias, // Totales por fecha
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                        },
+                    },
+                },
+            });
         });
-      });
   }
 
   obtenerDistribucionTipoProceso(fecha: string = '') {

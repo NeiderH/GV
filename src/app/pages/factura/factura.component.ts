@@ -40,12 +40,14 @@ export default class FacturaComponent {
   totalCTransferencias: number = 0;
   totalCOtros: number = 0;
 
+  mostrarTablaFacturas: boolean = true; // Controla qué tabla se muestra
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.obtenerFacturaAgrupada();
-    this.MostrarListaObservaciones();
+    // Si no tienes una fecha inicial, puedes pasar una cadena vacía o una fecha predeterminada
+    this.MostrarListaObservaciones(''); // O usa una fecha predeterminada
   }
   obtenerFacturaAgrupada() {
     this.http.get('http://localhost:3016/api/Factura/GetFacturaAgrupada').subscribe(
@@ -92,18 +94,18 @@ export default class FacturaComponent {
     );
   }
   abrirModalDetalles(facturasPorFecha: any) {
-    this.tipoModal = 'detalles'; // Indicar que se abrirá el modal de detalles
-    this.fechaSeleccionada = facturasPorFecha.fecha; // Asignar la fecha seleccionada
+    this.tipoModal = 'detalles';
+    this.fechaSeleccionada = facturasPorFecha.fecha;
     this.facturas = facturasPorFecha.facturas;
-    this.totalPorFecha = facturasPorFecha.total; // Asignar el total de la fecha seleccionada
-    this.totalinversion = facturasPorFecha.totalinv; // Asignar el total de ganancia
-    this.totalsi = facturasPorFecha.totalsini; // Asignar el total sin contar las inversiones
-    this.totalven = facturasPorFecha.totalventa; // Asignar el total de ventas
-    this.totaldomicilio = facturasPorFecha.totaldom; // Asignar el total de domicilios
-    this.totaltransferencia = facturasPorFecha.totaltrans; // Asignar el total de transferencias
-    this.totalot = facturasPorFecha.totalotro; // Asignar el total de otros
-    this.totalFacturado = facturasPorFecha.totalfac; // Asignar el total facturado
-
+    this.totalPorFecha = facturasPorFecha.total;
+    this.totalinversion = facturasPorFecha.totalinv;
+    this.totalsi = facturasPorFecha.totalsini;
+    this.totalven = facturasPorFecha.totalventa;
+    this.totaldomicilio = facturasPorFecha.totaldom;
+    this.totaltransferencia = facturasPorFecha.totaltrans;
+    this.totalot = facturasPorFecha.totalotro;
+    this.totalFacturado = facturasPorFecha.totalfac;
+  
     this.totalCVentas = 0;
     this.totalCDomicilios = 0;
     this.totalCTransferencias = 0;
@@ -124,6 +126,9 @@ export default class FacturaComponent {
           break;
       }
     });
+  
+    // Llama al método con la fecha seleccionada
+    this.MostrarListaObservaciones(this.fechaSeleccionada);
     this.modalActivo = true;
   }
   habilitarCampos() {
@@ -132,6 +137,9 @@ export default class FacturaComponent {
   cerrarModal() {
     this.camposHabilitados = false; // Reinicia el estado al cerrar el modal
     this.modalActivo = false;
+  }
+  alternarTablas() {
+    this.mostrarTablaFacturas = !this.mostrarTablaFacturas;
   }
   generarPDF() {
     const pdf = new jsPDF('p', 'mm', 'a4'); // Crear un documento PDF en formato A4
@@ -259,13 +267,24 @@ export default class FacturaComponent {
     // Guardar el PDF
     pdf.save(`Factura_${this.fechaSeleccionada}.pdf`);
   }
-  MostrarListaObservaciones(){
+  MostrarListaObservaciones(fecha: string) {
+    if (!fecha) {
+      console.warn('No se proporcionó una fecha válida para MostrarListaObservaciones.');
+      this.observacionFiltrados = [{ observaciont: 'No hay observaciones registradas para esta fecha', fecha: '' }];
+      return;
+    }
+  
     this.http.get('http://localhost:3016/api/Observacion/GetObservacion').subscribe(
       (data: any) => {
-        this.observacion = data.map((obs: any) => ({
+        const observaciones = data.map((obs: any) => ({
           ...obs,
+          fecha: obs.fecha.split('T')[0] // Asegúrate de comparar solo la fecha (sin la hora)
         }));
-        this.observacionFiltrados = this.observacion; // Los datos ya están ordenados desde el backend
+        this.observacionFiltrados = observaciones.filter((obs: any) => obs.fecha === fecha);
+  
+        if (this.observacionFiltrados.length === 0) {
+          this.observacionFiltrados = [{ observaciont: 'No hay observaciones registradas para esta fecha', fecha: '' }];
+        }
       },
       (error) => console.error('Error al obtener las Observaciones:', error)
     );
