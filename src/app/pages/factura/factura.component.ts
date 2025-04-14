@@ -31,6 +31,8 @@ export default class FacturaComponent {
   tipoModal: string = '';
   filtroFecha: string = '';
   totalFacturado: number = 0;
+  observacion: any[] = [];
+  observacionFiltrados: any[] = [];
 
   // contadores
   totalCVentas: number = 0;
@@ -43,6 +45,7 @@ export default class FacturaComponent {
 
   ngOnInit() {
     this.obtenerFacturaAgrupada();
+    this.MostrarListaObservaciones();
   }
   obtenerFacturaAgrupada() {
     this.http.get('http://localhost:3016/api/Factura/GetFacturaAgrupada').subscribe(
@@ -255,5 +258,16 @@ export default class FacturaComponent {
 
     // Guardar el PDF
     pdf.save(`Factura_${this.fechaSeleccionada}.pdf`);
+  }
+  MostrarListaObservaciones(){
+    this.http.get('http://localhost:3016/api/Observacion/GetObservacion').subscribe(
+      (data: any) => {
+        this.observacion = data.map((obs: any) => ({
+          ...obs,
+        }));
+        this.observacionFiltrados = this.observacion; // Los datos ya están ordenados desde el backend
+      },
+      (error) => console.error('Error al obtener las Observaciones:', error)
+    );
   }
 }
