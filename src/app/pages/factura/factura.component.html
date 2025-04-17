@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let factura of facturasPorFecha">
-                    <td>{{ factura.fecha }}</td>
+                    <td>{{ factura.fecha | date:'dd/MM/yyyy'}}</td>
                     <td>${{ factura.totalfac }}</td>
                     <td class="flex justify-center">
                         <div class="flex space-x-4">
@@ -57,7 +57,7 @@
     <div class="modal-content">
         <div class="box">
             <h1 class="title">Detalles del total de las Facturas</h1>
-            <p><strong>Fecha:</strong> {{ fechaSeleccionada }}</p>
+            <p><strong>Fecha:</strong> {{ fechaSeleccionada | date:'dd/MM/yyyy'}}</p>
             <!-- tabla de facturas registradas -->
             <table class="table" *ngIf="mostrarTablaFacturas">
                 <thead>

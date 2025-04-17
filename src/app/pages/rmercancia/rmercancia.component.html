@@ -48,7 +48,7 @@
             <tbody>
                 <tr *ngFor="let mercancia of mercanciaFiltrados">
                     <td>{{ mercancia.proveedor }}</td>
-                    <td>{{ mercancia.fecha }}</td>
+                    <td>{{ mercancia.fecha | date:'dd/MM/yyyy'}}</td>
                     <td>{{ mercancia.producto }}</td>
                     <td>${{ mercancia.precio.toLocaleString('es-ES') }}</td>
                     <td style="display: none;">{{ mercancia.estado == 0 ? 'Anulado' : (mercancia.estado == 1 ? 'Activo'
@@ -104,7 +104,7 @@
 </div>
 
 <!-- Modal para registrar una nueva Mercancia -->
-<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'registrar' && !mercanciaSeleccionada.id_merca}">
+<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'registrar' && !mercanciaSeleccionada._id}">
     <div class="modal-background" (click)="cerrarModal()"></div>
     <div class="modal-content">
         <!-- Contenido del modal -->
@@ -174,7 +174,7 @@
 </div>
 
 <!-- Modal para actualizar una mercancia -->
-<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'editar' && mercanciaSeleccionada.id_merca}">
+<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'editar' && mercanciaSeleccionada._id}">
     <div class="modal-background" (click)="cerrarModal()"></div>
     <div class="modal-content">
         <!-- Contenido del modal -->
@@ -237,7 +237,7 @@
 </div>
 
 <!-- Modal para ver detalles de la mercancia -->
-<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'detalles' && mercanciaSeleccionada.id_merca}">
+<div class="modal" [ngClass]="{'is-active': modalActivo && tipoModal == 'detalles' && mercanciaSeleccionada._id}">
     <div class="modal-background" (click)="cerrarModal()"></div>
     <div class="modal-content">
         <!-- Contenido del modal -->
@@ -247,12 +247,12 @@
                 <div class="columns">
                     <!-- Primera columna -->
                     <div class="column detalles-column">
-                        <p class="detalles-item" style="text-decoration:underline;"><strong>Identificador:</strong> {{ mercanciaSeleccionada.id_merca }}</p>
+                        <p class="detalles-item" style="text-decoration:underline;"><strong>Identificador:</strong> {{ mercanciaSeleccionada._id }}</p>
                         <p class="detalles-item"><strong>Proveedor:</strong> {{ mercanciaSeleccionada.proveedor }}</p>
                         <p class="detalles-item"><strong>Producto:</strong> {{ mercanciaSeleccionada.producto }}</p>
                         <p class="detalles-item"><strong>Precio:</strong> ${{ mercanciaSeleccionada.precio }}</p>
                         <p class="detalles-item"><strong>Descripción:</strong> {{ mercanciaSeleccionada.descripcion }}</p>
-                        <p class="detalles-item"><strong>Fecha:</strong> {{ mercanciaSeleccionada.fecha}}</p>
+                        <p class="detalles-item"><strong>Fecha:</strong> {{ mercanciaSeleccionada.fecha | date:'dd/MM/yyyy'}}</p>
                         <p class="detalles-item">
                             <strong>Estado:</strong>
                             <span [ngClass]="{'text-green-500': mercanciaSeleccionada.estado == 1, 'text-red-500': mercanciaSeleccionada.estado == 0}">

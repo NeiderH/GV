@@ -18,7 +18,7 @@ export default class RmercanciaComponent {
   mercancia: any[] = [];
   mercanciaFiltrados: any[] = [];
   nuevamercancia: any = { proveedor: '', producto: '', descripcion: '', precio: '', fecha: '', estado: '' };
-  mercanciaSeleccionada: any = { id_merca: null, proveedor: '', producto: '', descripcion: '', precio: '', fecha: '', estado: '' };
+  mercanciaSeleccionada: any = { _id: null, proveedor: '', producto: '', descripcion: '', precio: '', fecha: '', estado: '' };
   modalActivo: boolean = false;
   busqueda: string = '';
   tipoModal: string = '';
@@ -64,7 +64,7 @@ export default class RmercanciaComponent {
     );
   }
   editarMercancia() {
-    this.http.put(`http://localhost:3016/api/Mercancia/UpMercancia/${this.mercanciaSeleccionada.id_merca}`, this.mercanciaSeleccionada).subscribe(
+    this.http.put(`http://localhost:3016/api/Mercancia/UpMercancia/${this.mercanciaSeleccionada._id}`, this.mercanciaSeleccionada).subscribe(
       () => {
         this.obtenerMercancia();
         this.cerrarModal();
@@ -91,10 +91,10 @@ export default class RmercanciaComponent {
       if (result.isConfirmed) {
         const nuevoEstado = mercancia.estado == 1 ? 0 : 1; // Cambiar entre 1 (activo) y 0 (anulado)
 
-        this.http.put(`http://localhost:3016/api/Mercancia/EstadoMercancia/${mercancia.id_merca}`, { estado: nuevoEstado }).subscribe(
+        this.http.put(`http://localhost:3016/api/Mercancia/EstadoMercancia/${mercancia._id}`, { estado: nuevoEstado }).subscribe(
           () => {
             this.obtenerMercancia(); // Actualizar la lista de mercancías
-            Swal.fire('Éxito', `La mercancía ha sido ${nuevoEstado === 1 ? 'activada' : 'anulada'} correctamente`, 'success');
+            Swal.fire('Éxito', `La mercancía ha sido ${nuevoEstado == 1 ? 'activada' : 'anulada'} correctamente`, 'success');
           },
           (error) => {
             console.error('Error al cambiar el estado de la mercancía:', error);

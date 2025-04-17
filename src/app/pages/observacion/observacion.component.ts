@@ -11,18 +11,19 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
-export default class ObservacionComponent {
+export default class ObservacionComponent implements OnInit {
 
   observacion: any[] = [];
   observacionFiltrados: any[] = [];
   nuevaobservacion: any = { observaciont: '', fecha: '' };
-  observacionSeleccionada: any = { id_ob: null, observaciont: '', fecha: ''};
+  observacionSeleccionada: any = { _id: null, observaciont: '', fecha: ''};
   modalActivo: boolean = false;
   busqueda: string = '';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    console.log('ngOnInit ejecutado');
     this.obtenerObservacion();
   }
 
@@ -53,7 +54,7 @@ export default class ObservacionComponent {
   }
 
   editarObservacion() {
-    this.http.put(`http://localhost:3016/api/Observacion/UpObservacion/${this.observacionSeleccionada.id_ob}`, this.observacionSeleccionada).subscribe(
+    this.http.put(`http://localhost:3016/api/Observacion/UpObservacion/${this.observacionSeleccionada._id}`, this.observacionSeleccionada).subscribe(
       () => {
         this.obtenerObservacion();
         this.cerrarModal();
@@ -66,7 +67,7 @@ export default class ObservacionComponent {
     );
   }
 
-  eliminarObservacion(id: number) {
+  eliminarObservacion(id: string) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'No podrás revertir esto',
@@ -74,7 +75,8 @@ export default class ObservacionComponent {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo'
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.http.delete(`http://localhost:3016/api/Observacion/DelObservacion/${id}`).subscribe(
@@ -93,8 +95,8 @@ export default class ObservacionComponent {
 
   abrirModal() {
     this.modalActivo = true;
-    this.nuevaobservacion = { observacion: '', fecha: '' }; 
-    this.observacionSeleccionada = { id_ob: null, observacion: '', fecha: new Date().toISOString().slice(0, 16) }; 
+    this.nuevaobservacion = { observaciont: '', fecha: '' }; 
+    this.observacionSeleccionada = { _id: null, observacion: '', fecha: new Date().toISOString().slice(0, 16) }; 
   }
 
   abrirModalEdicion(observacion: any) {

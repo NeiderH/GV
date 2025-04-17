@@ -14,19 +14,24 @@ import { CommonModule } from '@angular/common';
 export default class LoginComponent {
   correo: string = '';
   password: string = '';
+  mensajeError: string = '';
 
   constructor(private authservice: AuthService, private router: Router) { }
 
   login(): void {
+    this.mensajeError = ''; // Limpiar mensaje antes de nuevo intento
+  
     this.authservice.login(this.correo, this.password).subscribe({
       next: () => {
         if (this.authservice.isAuth()) {
-          this.router.navigate(['dashboard']); // Redirige solo si el usuario está autenticado
+          this.router.navigate(['dashboard']);
         }
       },
       error: (err) => {
         console.error('Error al iniciar sesión:', err);
+        this.mensajeError = err.error?.message || 'Error al iniciar sesión. Intenta de nuevo.';
       }
     });
   }
+  
 }

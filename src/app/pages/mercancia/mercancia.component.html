@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let mercancia of mercanciasPorFecha">
-                    <td>{{ mercancia.fecha }}</td>
+                    <td>{{ mercancia.fecha | date:'dd/MM/yyyy'}}</td>
                     <td>${{ mercancia.total }}</td>
                     <td class="flex justify-center">
                         <div class="flex space-x-4">
@@ -56,7 +56,7 @@
     <div class="modal-content">
         <div class="box">
             <h1 class="title">Detalles de la Mercancía</h1>
-            <p><strong>Fecha:</strong> {{ fechaSeleccionada }}</p>
+            <p><strong>Fecha:</strong> {{ fechaSeleccionada | date:'dd/MM/yyyy'}}</p>
             <table class="table">
                 <thead>
                     <tr>

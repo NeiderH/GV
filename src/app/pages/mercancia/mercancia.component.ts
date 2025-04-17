@@ -35,6 +35,7 @@ export default class MercanciaComponent {
           fecha,
           total: grupo.total.toFixed(2), // Formatear el total
           mercancias: grupo.detalles
+          
         }));
       },
       (error) => console.error('Error al obtener mercancías agrupadas:', error)

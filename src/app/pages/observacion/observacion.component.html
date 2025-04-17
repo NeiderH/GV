@@ -39,7 +39,7 @@
             <tbody>
                 <tr *ngFor="let observacion of observacionFiltrados">
                     <td>{{ observacion.observaciont }}</td>
-                    <td>{{ observacion.fecha }}</td>
+                    <td>{{ observacion.fecha | date:'dd/MM/yyyy' }}</td>
                     <td class="flex justify-center">
                         <div class="flex space-x-4">
                             <button
@@ -53,7 +53,7 @@
                             </button>
                             <button
                                 class="middle none center rounded-lg bg-red-500 py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                data-ripple-light="true" (click)="eliminarObservacion(observacion.id_ob)">
+                                data-ripple-light="true" (click)="eliminarObservacion(observacion._id)">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                                     width="24px" fill="#fff">
                                     <path
@@ -69,7 +69,7 @@
 </div>
 
 <!-- Modal para registrar una nueva Observacion -->
-<div class="modal" [ngClass]="{'is-active': modalActivo && !observacionSeleccionada.id_ob}">
+<div class="modal" [ngClass]="{'is-active': modalActivo && !observacionSeleccionada._id}">
     <div class="modal-background" (click)="cerrarModal()"></div>
     <div class="modal-content">
         <!-- Contenido del modal -->
@@ -86,7 +86,7 @@
                 <div class="field">
                     <label class="label">Fecha</label>
                     <div class="control">
-                        <input class="input" type="datetime-local" [(ngModel)]="nuevaobservacion.fecha" name="fecha"
+                        <input class="input" type="date" [(ngModel)]="nuevaobservacion.fecha" name="fecha"
                             required>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
 </div>
 
 <!-- Modal para actualizar una Observacion -->
-<div class="modal" [ngClass]="{'is-active': modalActivo && observacionSeleccionada.id_ob}">
+<div class="modal" [ngClass]="{'is-active': modalActivo && observacionSeleccionada._id}">
     <div class="modal-background" (click)="cerrarModal()"></div>
     <div class="modal-content">
         <!-- Contenido del modal -->

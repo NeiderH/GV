@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule,RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export default class RegisterComponent {
   nombre: string = '';
@@ -23,10 +24,14 @@ export default class RegisterComponent {
 
   register(): void {
     if (this.password !== this.confirmarPassword) {
-      alert('Las contraseñas no coinciden');
+      Swal.fire({
+        icon: 'error',
+        title: 'Las contraseñas no coinciden',
+        text: 'Por favor, verifica que ambas contraseñas sean iguales.',
+      });
       return;
     }
-  
+
     const userData = {
       nombre: this.nombre,
       correo: this.correo,
@@ -34,16 +39,25 @@ export default class RegisterComponent {
       estado: this.estado,
       permiso: this.permiso
     };
-  
+
     this.authservice.register(userData).subscribe({
       next: () => {
-        alert('Registro exitoso');
-        this.router.navigate(['/login']); // Redirige al login tras registrarse
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro exitoso',
+          text: '¡Tu cuenta ha sido registrada correctamente!',
+        }).then(() => {
+          this.router.navigate(['/login']); // Redirige al login tras registrarse
+        });
       },
       error: (err) => {
         console.error('Error en el registro', err);
-        alert('Hubo un problema con el registro');
+        Swal.fire({
+          icon: 'error',
+          title: 'Hubo un problema con el registro',
+          text: 'Por favor, intenta nuevamente.',
+        });
       }
     });
-  }  
+  }
 }

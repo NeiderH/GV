@@ -1,6 +1,6 @@
 <!-- component -->
 <div
-    class="bg-blue-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-blue-800 bottom-0 leading-5 h-full w-full overflow-hidden"> 
+    class="bg-blue-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-blue-800 bottom-0 leading-5 h-full w-full overflow-hidden">
 </div>
 <div class="relative   min-h-screen  sm:flex sm:flex-row  justify-center bg-transparent rounded-3xl shadow-xl">
     <div class="flex-col flex  self-center lg:px-5 sm:max-w-4xl xl:max-w-md  z-10">
@@ -35,9 +35,11 @@
                         </a>
                     </div>
                 </div>
+                <div *ngIf="mensajeError" class="text-red-600 text-sm font-semibold mb-2">
+                    {{ mensajeError }}
+                </div>
                 <div>
-                    <button (click)="login()" 
-                        type="submit"
+                    <button (click)="login()" type="submit"
                         class="w-full flex justify-center bg-blue-800  hover:bg-blue-600 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-0">
                         Iniciar Sesion
                     </button>

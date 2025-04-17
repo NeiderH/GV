@@ -25,4 +25,7 @@ export class HeaderComponent implements OnInit {
     this.authService.logout(); // Usa el método logout del AuthService
     this.router.navigate(['login']); // Redirigir a la página de login
   }
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
 }

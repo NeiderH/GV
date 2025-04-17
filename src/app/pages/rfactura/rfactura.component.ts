@@ -16,7 +16,7 @@ export default class RfacturaComponent {
   factura: any[] = [];
   facturaFiltrados: any[] = [];
   nuevafactura: any = { fecha: '', tipo_proceso: '', subtotal: '', descripcion: '', estado: '' };
-  facturaSeleccionada: any = { id_factura: null, fecha: '', tipo_proceso: '', subtotal: '', descripcion: '', estado: '' };
+  facturaSeleccionada: any = { _id: null, fecha: '', tipo_proceso: '', subtotal: '', descripcion: '', estado: '' };
   modalActivo: boolean = false;
   filtroTipoProceso: string = '';
   filtroEstado: string = '';
@@ -103,15 +103,15 @@ export default class RfacturaComponent {
     );
   }
   editarFactura() {
-    this.http.put(`http://localhost:3016/api/Factura/UpFactura/${this.facturaSeleccionada.id_factura}`, this.facturaSeleccionada).subscribe(
+    this.http.put(`http://localhost:3016/api/Factura/UpFactura/${this.facturaSeleccionada._id}`, this.facturaSeleccionada).subscribe(
       () => {
         this.obtenerFactura();
         this.cerrarModal();
-        Swal.fire('Éxito', 'Mercancia actualizada correctamente', 'success');
+        Swal.fire('Éxito', 'Factura actualizada correctamente', 'success');
       },
       (error) => {
-        console.error('Error al actualizar la Mercancia:', error);
-        Swal.fire('Error', 'Error al actualizar la Mercancia', 'error');
+        console.error('Error al actualizar la Factura:', error);
+        Swal.fire('Error', 'Error al actualizar la Factura', 'error');
       }
     );
   }
@@ -119,7 +119,7 @@ export default class RfacturaComponent {
     // Mostrar un cuadro de confirmación antes de anular
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas ${factura.estado == 1 ? 'anular' : 'activar'} esta factura?`,
+      text: `¿Deseas ${factura.estado == 1 ? 'anular' : 'activar'} esta Factura?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -130,7 +130,7 @@ export default class RfacturaComponent {
       if (result.isConfirmed) {
         const nuevoEstado = factura.estado == 1 ? 0 : 1; // Cambiar entre 1 (activo) y 0 (anulado)
 
-        this.http.put(`http://localhost:3016/api/Factura/EstadoFactura/${factura.id_factura}`, { estado: nuevoEstado }).subscribe(
+        this.http.put(`http://localhost:3016/api/Factura/EstadoFactura/${factura._id}`, { estado: nuevoEstado }).subscribe(
           () => {
             this.obtenerFactura(); // Actualizar la lista de mercancías
             Swal.fire('Éxito', `La factura ha sido ${nuevoEstado == 1 ? 'activada' : 'anulada'} correctamente`, 'success');
@@ -155,7 +155,7 @@ export default class RfacturaComponent {
       estado: ''
     };
     this.facturaSeleccionada = {
-      id_factura: null,
+      _id: null,
       observacion: '',
       fecha: fechaActual.toISOString().slice(0, 10)
     };
