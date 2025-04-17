@@ -19,10 +19,7 @@ export default class LoginComponent {
 
   login(): void {
     this.authservice.login(this.correo, this.password).subscribe({
-      next: (response) => {
-        console.log('Respuesta del servidor:', response); // Verifica la respuesta del servidor
-        localStorage.setItem('userId', response.userData.id); // Guarda el ID del usuario
-        console.log('ID del usuario guardado en localStorage:', localStorage.getItem('userId')); // Verifica el ID
+      next: () => {
         if (this.authservice.isAuth()) {
           this.router.navigate(['dashboard']); // Redirige solo si el usuario está autenticado
         }
